@@ -20,6 +20,8 @@
     const socket = new WebSocket("wss://" + location.hostname + ":4444/ws");
     console.log(location.hostname)
     const pc = new RTCPeerConnection(config)
+    pc.addTransceiver("audio", { direction: 'recvonly' });
+    pc.addTransceiver("video", { direction: 'recvonly' });
     pc.ontrack = function ({track, streams}) {
         if (track.kind === "video") {
             log("got track")
@@ -109,20 +111,20 @@
     }
     // let localStream
     let pid
-    navigator.mediaDevices.getUserMedia({
-        video: false,
-        audio: true
-    }).then(stream => {
-        // document.getElementById("video").srcObject = stream
-
-        localStream = stream
-    }).catch(log)
+    // navigator.mediaDevices.getUserMedia({
+    //     video: false,
+    //     audio: true
+    // }).then(stream => {
+    //     // document.getElementById("video").srcObject = stream
+    //
+    //     localStream = stream
+    // }).catch(log)
 
     window.publish = () => {
-        log("Publishing stream")
-        localStream.getTracks().forEach((track) => {
-            pc.addTrack(track, localStream);
-        });
+        // log("Publishing stream")
+        // localStream.getTracks().forEach((track) => {
+        //     pc.addTrack(track, localStream);
+        // });
 
         join()
     }
