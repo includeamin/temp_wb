@@ -20,6 +20,7 @@
 
     Golang base64 Session Description<br/>
     <textarea id="remoteSessionDescription"></textarea> <br/>
+    <textarea id="RAW"></textarea> <br/>
     <button onclick="window.startSession()"> Start Session</button>
     <br/>
 </div>
@@ -65,7 +66,9 @@ Logs<br/>
             console.log(msg)
 
             document.getElementById('remoteSessionDescription').value = msg
+            document.getElementById('RAW').value = JSON.parse(atob(msg)).sdp
             pc.setRemoteDescription(new RTCSessionDescription(JSON.parse(atob(msg))))
+
 
         });
         if (isPublisher) {
