@@ -6,8 +6,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.0/uuid.min.js"></script>
 </head>
 <body>
-<video id="video" width="1280" height="720" autoplay muted playsinline></video>
+<video id="video" width="1280" height="720" autoplay muted playsinline controls></video>
 <button onclick="window.publish()">Publish</button>
+<div id="client"></div>
 <div id="logs"></div>
 <script>
     const log = msg =>
@@ -19,6 +20,18 @@
     }
     const socket = new WebSocket("wss://" + location.hostname + ":4444/ws");
     const pc = new RTCPeerConnection(config)
+    // pc.ontrack = function ({ track, streams }) {
+    //     if (track.kind === "audio") {
+    //         log("got track")
+    //         track.onunmute = () => {
+    //             let el = document.createElement(track.kind)
+    //             el.srcObject = streams[0]
+    //             el.autoplay = true
+    //
+    //             document.getElementById('client').appendChild(el)
+    //         }
+    //     }
+    // }
     pc.oniceconnectionstatechange = e => log(`ICE connection state: ${pc.iceConnectionState}`)
     pc.onicecandidate = event => {
         if (event.candidate !== null) {
