@@ -1,22 +1,23 @@
 package main
 
 import (
-"context"
-"encoding/json"
-"errors"
-"flag"
-"fmt"
-"net/http"
-"os"
+	"context"
+	"encoding/json"
+	"errors"
+	"flag"
+	"fmt"
+	"html/template"
+	"net/http"
+	"os"
 
-"github.com/gorilla/websocket"
-"github.com/pion/webrtc/v3"
-"github.com/sourcegraph/jsonrpc2"
-websocketjsonrpc2 "github.com/sourcegraph/jsonrpc2/websocket"
-"github.com/spf13/viper"
+	"github.com/gorilla/websocket"
+	"github.com/pion/webrtc/v3"
+	"github.com/sourcegraph/jsonrpc2"
+	websocketjsonrpc2 "github.com/sourcegraph/jsonrpc2/websocket"
+	"github.com/spf13/viper"
 
-sfu "github.com/pion/ion-sfu/pkg"
-"github.com/pion/ion-sfu/pkg/log"
+	sfu "github.com/pion/ion-sfu/pkg"
+	"github.com/pion/ion-sfu/pkg/log"
 )
 
 var (
@@ -241,9 +242,9 @@ func (r *RPC) Handle(ctx context.Context, conn *jsonrpc2.Conn, req *jsonrpc2.Req
 				return
 			}
 
-			if err := conn.Notify(ctx, "offer", offer); err != nil {
-				log.Errorf("error sending offer %s", err)
-			}
+			//if err := conn.Notify(ctx, "offer", offer); err != nil {
+			//	log.Errorf("error sending offer %s", err)
+			//}
 		})
 
 		p.peer = peer
@@ -399,6 +400,8 @@ func main() {
 			p.peer.Close()
 		}
 	}))
+	http.HandleFunc("/publisher", web)
+	http.HandleFunc("/subscriber", sub)
 
 	var err error
 	if key != "" && cert != "" {
@@ -410,5 +413,19 @@ func main() {
 	}
 	if err != nil {
 		panic(err)
+	}
+}
+
+func web(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" {
+		t, _ := template.ParseFiles("publisher.html")
+		t.Execute(w, nil)
+
+	}
+}
+func sub(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" {
+		t, _ := template.ParseFiles("subscriber.html")
+		t.Execute(w, nil)
 	}
 }
