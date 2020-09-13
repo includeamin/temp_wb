@@ -17,7 +17,7 @@
             urls: 'stun:stun.l.google.com:19302'
         }]
     }
-    const socket = new WebSocket("wss://localhost:4443/ws");
+    const socket = new WebSocket("wss://localhost:4444/ws");
     const pc = new RTCPeerConnection(config)
     pc.ontrack = function ({track, streams}) {
         if (track.kind === "video") {
