@@ -18,6 +18,7 @@
         }]
     }
     const socket = new WebSocket("wss://" + location.hostname + ":4444/ws");
+    console.log(location.hostname)
     const pc = new RTCPeerConnection(config)
     pc.ontrack = function ({track, streams}) {
         if (track.kind === "video") {
